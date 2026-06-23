@@ -1,0 +1,17 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+	content: [ './src/**/*.{js,jsx}' ],
+	theme: {
+		extend: {
+			colors: {
+				euphoria: {
+					50: '#ecfdf5',
+					500: '#10b981',
+					600: '#059669',
+					700: '#047857',
+				},
+			},
+		},
+	},
+	plugins: [],
+};

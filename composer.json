@@ -1,0 +1,11 @@
+{
+  "name": "pinemesh/euphoria",
+  "description": "Euphoria WordPress Plugin",
+  "type": "wordpress-plugin",
+  "autoload": {
+    "psr-4": {
+      "Euphoria\\": "app/"
+    }
+  },
+  "require": {}
+}

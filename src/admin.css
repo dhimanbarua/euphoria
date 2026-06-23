@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body.toplevel_page_euphoria #wpcontent {
+	padding-left: 0;
+}
+
+body.toplevel_page_euphoria #wpbody-content {
+	padding-bottom: 0;
+}
+
+body.toplevel_page_euphoria .euphoria-admin {
+	margin: 0;
+}
+
+#euphoria-root {
+	@apply text-gray-900;
+}
+
+#euphoria-root * {
+	box-sizing: border-box;
+}
