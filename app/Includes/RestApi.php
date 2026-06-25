@@ -63,6 +63,9 @@ class RestApi {
 						'redirection'   => array(
 							'type' => 'object',
 						),
+						'templates'     => array(
+							'type' => 'object',
+						),
 					),
 				),
 			)

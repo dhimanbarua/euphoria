@@ -22,6 +22,16 @@ export const defaultSettings = {
 		low_ratings_to: 'none',
 		high_ratings_to: 'thank_you',
 	},
+	templates: {
+		first_email: {
+			subject: 'How was your experience?',
+			banner: '🎁 Win $50 Store Credit',
+			heading: 'How was your experience?',
+			body: "Hi {customer_name},\n\nWe'd love to hear your thoughts on the {product_name} you recently purchased. Your feedback is truly appreciated and can help other customers make informed decisions.",
+			button_text: 'Write a Review',
+			footer_text: "Best regards,\n{store_name}",
+		},
+	},
 };
 
 export const triggerOptions = [

@@ -48,6 +48,12 @@ const EmailReminder = () => {
 						...defaultSettings.redirection,
 						...data.redirection,
 					},
+					templates: {
+						first_email: {
+							...defaultSettings.templates.first_email,
+							...( data.templates?.first_email || {} ),
+						},
+					},
 				} );
 			} )
 			.catch( () => {
@@ -64,6 +70,19 @@ const EmailReminder = () => {
 			[ section ]: {
 				...current[ section ],
 				[ key ]: value,
+			},
+		} ) );
+	};
+
+	const updateTemplateSetting = ( key, value ) => {
+		setSettings( ( current ) => ( {
+			...current,
+			templates: {
+				...current.templates,
+				first_email: {
+					...current.templates.first_email,
+					[ key ]: value,
+				},
 			},
 		} ) );
 	};
@@ -211,12 +230,106 @@ const EmailReminder = () => {
 		</div>
 	);
 
+	const renderFirstEmailTab = () => {
+		const firstEmail = settings.templates.first_email;
+
+		return (
+			<div className="space-y-4">
+				{ /* Merge Tag Info Box */ }
+				<div className="rounded-xl border border-sky-100 bg-sky-50/50 p-5">
+					<h3 className="text-sm font-semibold text-sky-950">Supported Merge Tags</h3>
+					<p className="mt-1 text-sm text-sky-800">
+						Use these tags in your email fields to dynamically pull customer and order information:
+					</p>
+					<div className="mt-3 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+						<div className="rounded-lg border border-sky-100/80 bg-white p-3 shadow-sm">
+							<code className="text-xs font-semibold text-emerald-700 font-mono">{'{customer_name}'}</code>
+							<p className="mt-1 text-xs text-gray-500">Customer's full name</p>
+						</div>
+						<div className="rounded-lg border border-sky-100/80 bg-white p-3 shadow-sm">
+							<code className="text-xs font-semibold text-emerald-700 font-mono">{'{product_name}'}</code>
+							<p className="mt-1 text-xs text-gray-500">Name of the purchased product</p>
+						</div>
+						<div className="rounded-lg border border-sky-100/80 bg-white p-3 shadow-sm">
+							<code className="text-xs font-semibold text-emerald-700 font-mono">{'{store_name}'}</code>
+							<p className="mt-1 text-xs text-gray-500">Your WooCommerce store name</p>
+						</div>
+						<div className="rounded-lg border border-sky-100/80 bg-white p-3 shadow-sm">
+							<code className="text-xs font-semibold text-emerald-700 font-mono">{'{order_id}'}</code>
+							<p className="mt-1 text-xs text-gray-500">The WooCommerce order number</p>
+						</div>
+						<div className="rounded-lg border border-sky-100/80 bg-white p-3 shadow-sm">
+							<code className="text-xs font-semibold text-emerald-700 font-mono">{'{review_url}'}</code>
+							<p className="mt-1 text-xs text-gray-500">Link to the product review form</p>
+						</div>
+					</div>
+				</div>
+
+				{ /* Form Card */ }
+				<SectionCard title="First Email Template">
+					<FormField
+						type="text"
+						label="Subject Line"
+						description="The subject line of the email displayed in the customer's inbox."
+						value={ firstEmail.subject }
+						onChange={ ( value ) => updateTemplateSetting( 'subject', value ) }
+					/>
+					<FormField
+						type="text"
+						label="Incentive Banner Text"
+						description="A promo header shown in the colored banner. Leave empty to disable."
+						value={ firstEmail.banner }
+						onChange={ ( value ) => updateTemplateSetting( 'banner', value ) }
+					/>
+					<FormField
+						type="text"
+						label="Email Heading"
+						description="The primary heading at the top of the email content."
+						value={ firstEmail.heading }
+						onChange={ ( value ) => updateTemplateSetting( 'heading', value ) }
+					/>
+					<FormField
+						type="textarea"
+						label="Email Body"
+						description="The main body text of the review reminder. Supports merge tags."
+						value={ firstEmail.body }
+						onChange={ ( value ) => updateTemplateSetting( 'body', value ) }
+					/>
+					<FormField
+						type="text"
+						label="Button Text"
+						description="The call-to-action text on the button."
+						value={ firstEmail.button_text }
+						onChange={ ( value ) => updateTemplateSetting( 'button_text', value ) }
+					/>
+					<FormField
+						type="textarea"
+						label="Footer Text"
+						description="The closing text at the bottom of the email."
+						value={ firstEmail.footer_text }
+						onChange={ ( value ) => updateTemplateSetting( 'footer_text', value ) }
+					/>
+				</SectionCard>
+
+				{ /* Save Bar */ }
+				<div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-5 py-4">
+					{ notice && <p className="text-sm text-gray-600">{ notice }</p> }
+					<button
+						type="button"
+						onClick={ handleSave }
+						disabled={ isSaving }
+						className="ml-auto rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+					>
+						{ isSaving ? 'Saving…' : 'Save Settings' }
+					</button>
+				</div>
+			</div>
+		);
+	};
+
 	const renderTabContent = () => {
 		if ( activeTab === 'first-email' ) {
-			return renderStaticTab(
-				'First Email',
-				'Configure the initial review request email content in a future release.'
-			);
+			return renderFirstEmailTab();
 		}
 
 		if ( activeTab === 'follow-ups' ) {
@@ -261,6 +374,7 @@ const EmailReminder = () => {
 				</main>
 
 				<PreviewPanel
+					settings={ settings }
 					previewMode={ previewMode }
 					onPreviewModeChange={ setPreviewMode }
 				/>

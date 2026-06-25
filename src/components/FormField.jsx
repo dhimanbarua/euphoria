@@ -29,6 +29,46 @@ const FormField = ( {
 		);
 	}
 
+	if ( type === 'text' ) {
+		return (
+			<div>
+				<label htmlFor={ fieldId } className="mb-2 block text-sm font-medium text-gray-900">
+					{ label }
+				</label>
+				{ description && (
+					<p className="mb-2 text-sm text-gray-500">{ description }</p>
+				) }
+				<input
+					id={ fieldId }
+					type="text"
+					value={ value || '' }
+					onChange={ ( event ) => onChange( event.target.value ) }
+					className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+				/>
+			</div>
+		);
+	}
+
+	if ( type === 'textarea' ) {
+		return (
+			<div>
+				<label htmlFor={ fieldId } className="mb-2 block text-sm font-medium text-gray-900">
+					{ label }
+				</label>
+				{ description && (
+					<p className="mb-2 text-sm text-gray-500">{ description }</p>
+				) }
+				<textarea
+					id={ fieldId }
+					value={ value || '' }
+					onChange={ ( event ) => onChange( event.target.value ) }
+					rows={ 4 }
+					className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+				/>
+			</div>
+		);
+	}
+
 	return (
 		<div>
 			<label htmlFor={ fieldId } className="mb-2 block text-sm font-medium text-gray-900">

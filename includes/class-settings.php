@@ -11,9 +11,9 @@ namespace Euphoria\Includes;
 defined('ABSPATH') || exit;
 
 /**
- * Class Settings
+ * Class Euphoria_Settings
  */
-class Settings
+class Euphoria_Settings
 {
 
 	/**
@@ -60,16 +60,6 @@ class Settings
 				'low_ratings_to' => 'none',
 				'high_ratings_to' => 'thank_you',
 			),
-			'templates' => array(
-				'first_email' => array(
-					'subject'     => 'How was your experience?',
-					'banner'      => '🎁 Win $50 Store Credit',
-					'heading'     => 'How was your experience?',
-					'body'        => "Hi {customer_name},\n\nWe'd love to hear your thoughts on the {product_name} you recently purchased. Your feedback is truly appreciated and can help other customers make informed decisions.",
-					'button_text' => 'Write a Review',
-					'footer_text' => "Best regards,\n{store_name}",
-				),
-			),
 		);
 	}
 
@@ -98,7 +88,7 @@ class Settings
 	public static function save_settings($data)
 	{
 		if (!is_array($data)) {
-			return new \WP_Error(
+			return new WP_Error(
 				'euphoria_invalid_settings',
 				__('Settings must be an object.', 'euphoria'),
 				array('status' => 400)
@@ -126,8 +116,6 @@ class Settings
 	public static function sanitize_settings($data)
 	{
 		$defaults = self::get_defaults();
-		$templates = $data['templates'] ?? array();
-		$first_email = $templates['first_email'] ?? array();
 
 		return array(
 			'enabled' => !empty($data['enabled']),
@@ -183,16 +171,6 @@ class Settings
 					$defaults['redirection']['high_ratings_to']
 				),
 			),
-			'templates' => array(
-				'first_email' => array(
-					'subject'     => sanitize_text_field( $first_email['subject'] ?? $defaults['templates']['first_email']['subject'] ),
-					'banner'      => sanitize_text_field( $first_email['banner'] ?? $defaults['templates']['first_email']['banner'] ),
-					'heading'     => sanitize_text_field( $first_email['heading'] ?? $defaults['templates']['first_email']['heading'] ),
-					'body'        => sanitize_textarea_field( $first_email['body'] ?? $defaults['templates']['first_email']['body'] ),
-					'button_text' => sanitize_text_field( $first_email['button_text'] ?? $defaults['templates']['first_email']['button_text'] ),
-					'footer_text' => sanitize_textarea_field( $first_email['footer_text'] ?? $defaults['templates']['first_email']['footer_text'] ),
-				),
-			),
 		);
 	}
 
@@ -208,7 +186,7 @@ class Settings
 		$to = strtotime($data['timing']['send_to']);
 
 		if (false === $from || false === $to) {
-			return new \WP_Error(
+			return new WP_Error(
 				'euphoria_invalid_timing',
 				__('Invalid timing values provided.', 'euphoria'),
 				array('status' => 400)

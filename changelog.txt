@@ -1,3 +1,6 @@
-= 0.0.1 =
+= 1.0.0 =
+* Implement Phase 1: Dynamic Email Preview System with live desktop/mobile preview and merge tag interpolation.
+* Implement Phase 2: Email Template Editor with subject line, banner, heading, body, button, and footer customizability, real-time preview updates, and database option persistence.
 
+= 0.0.1 =
 * Initial release
