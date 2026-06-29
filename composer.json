@@ -1,11 +1,29 @@
 {
-  "name": "pinemesh/euphoria",
-  "description": "Euphoria WordPress Plugin",
-  "type": "wordpress-plugin",
-  "autoload": {
-    "psr-4": {
-      "Euphoria\\": "app/"
+    "name": "pinemesh/euphoria",
+    "type": "wordpress-plugin",
+
+    "autoload": {
+        "psr-4": {
+            "Euphoria\\": "app/"
+        }
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "Euphoria\\Tests\\": "tests/"
+        }
+    },
+
+    "require": {},
+
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    },
+
+    "scripts": {
+        "test": "phpunit",
+        "test:unit": "phpunit --testsuite Unit",
+        "test:integration": "phpunit --testsuite Integration",
+        "coverage": "phpunit --coverage-html coverage"
     }
-  },
-  "require": {}
 }

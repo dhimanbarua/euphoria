@@ -20,6 +20,8 @@ const files = [
   '**/*',
   '!**/.*/**', // Hidden files/dirs on Mac/Linux
   '!**/__*/**', // Hidden dirs on Mac
+  '!tests/**',
+  '!phpunit.xml*',
   '!.yarn/**',
   '!.gitignore',
   '!node_modules/**',
@@ -74,6 +76,8 @@ const copyFiles = () => {
           "!node_modules/**",
           "!gulpfile.js",
           "!test-cleancss.js",
+          '!tests/**',
+          '!phpunit.xml*',
           "!AGENT.md",
           "!*.jpg",
           "!*.json",
@@ -85,6 +89,7 @@ const copyFiles = () => {
           "!postcss.config.js",
           "!tailwind.config.js",
           "!build/**",
+          '!package.json',
           "!package-lock.json",
           "!yarn.lock",
           "!composer.json",
