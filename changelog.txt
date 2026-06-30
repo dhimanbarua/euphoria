@@ -1,3 +1,10 @@
+= 1.1.0 =
+* Feature: Conditional Settings (TASK-03):
+  * Created global state wrapper `SettingsProvider` and `useSettings` hook in `src/store/SettingsContext.jsx`.
+  * Added read-only support with custom warning notices to `SectionCard`.
+  * Added native HTML disabled state integration in `FormField` and `Toggle`.
+  * Enabled instant UI state disabling for General, Timing, and Delivery settings when the master Email Reminder toggle is disabled.
+
 = 1.0.0 =
 * Phase 1 – Dynamic Email Preview System:
   * Extracted `parseTemplate()` into `src/utils/parseTemplate.js` as a standalone, documented utility.

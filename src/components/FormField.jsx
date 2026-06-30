@@ -1,4 +1,4 @@
-const FormField = ( {
+const FormField = ({
 	label,
 	description,
 	type = 'select',
@@ -6,64 +6,68 @@ const FormField = ( {
 	onChange,
 	options = [],
 	id,
-} ) => {
-	const fieldId = id || label.toLowerCase().replace( /\s+/g, '-' );
+	disabled = false,
+}) => {
+	const fieldId = id || label.toLowerCase().replace(/\s+/g, '-');
 
-	if ( type === 'checkbox' ) {
+	if (type === 'checkbox') {
 		return (
-			<label htmlFor={ fieldId } className="flex items-start gap-3">
+			<label htmlFor={fieldId} className={`flex items-start gap-3 ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}>
 				<input
-					id={ fieldId }
+					id={fieldId}
 					type="checkbox"
-					checked={ Boolean( value ) }
-					onChange={ ( event ) => onChange( event.target.checked ) }
-					className="mt-1 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+					checked={Boolean(value)}
+					disabled={disabled}
+					onChange={(event) => onChange(event.target.checked)}
+					className="mt-1 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed"
 				/>
 				<span>
-					<span className="block text-sm font-medium text-gray-900">{ label }</span>
-					{ description && (
-						<span className="mt-1 block text-sm text-gray-500">{ description }</span>
-					) }
+					<span className={`block text-sm font-medium ${disabled ? 'text-gray-400' : 'text-gray-900'}`}>{label}</span>
+					{description && (
+						<span className={`mt-1 block text-sm ${disabled ? 'text-gray-400' : 'text-gray-500'}`}>{description}</span>
+					)}
 				</span>
 			</label>
 		);
 	}
 
-	if ( type === 'text' ) {
+	if (type === 'text') {
 		return (
 			<div>
-				<label htmlFor={ fieldId } className="mb-2 block text-sm font-medium text-gray-900">
-					{ label }
+				<label htmlFor={fieldId} className={`mb-2 block text-sm font-medium ${disabled ? 'text-gray-400' : 'text-gray-900'}`}>
+					{label}
 				</label>
-				{ description && (
-					<p className="mb-2 text-sm text-gray-500">{ description }</p>
-				) }
+				{description && (
+					<p className={`mb-2 text-sm ${disabled ? 'text-gray-400' : 'text-gray-500'}`}>{description}</p>
+				)}
 				<input
-					id={ fieldId }
+					id={fieldId}
 					type="text"
-					value={ value || '' }
-					onChange={ ( event ) => onChange( event.target.value ) }
-					className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+					value={value || ''}
+					disabled={disabled}
+					onChange={(event) => onChange(event.target.value)}
+					className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400 disabled:border-gray-200"
 				/>
 			</div>
 		);
 	}
 
-	if ( type === 'textarea' ) {
+	if (type === 'textarea') {
 		return (
 			<div>
-				<label htmlFor={ fieldId } className="mb-2 block text-sm font-medium text-gray-900">
-					{ label }
+				<label htmlFor={fieldId} className={`mb-2 block text-sm font-medium ${disabled ? 'text-gray-400' : 'text-gray-900'}`}>
+					{label}
 				</label>
-				{ description && (
-					<p className="mb-2 text-sm text-gray-500">{ description }</p>
-				) }
+				{description && (
+					<p className={`mb-2 text-sm ${disabled ? 'text-gray-400' : 'text-gray-500'}`}>{description}</p>
+				)}
 				<textarea
-					id={ fieldId }
-					value={ value || '' }
-					onChange={ ( event ) => onChange( event.target.value ) }
-					rows={ 4 }
-					className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+					id={fieldId}
+					value={value || ''}
+					disabled={disabled}
+					onChange={(event) => onChange(event.target.value)}
+					rows={4}
+					className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400 disabled:border-gray-200"
 				/>
 			</div>
 		);
@@ -71,23 +75,24 @@ const FormField = ( {
 
 	return (
 		<div>
-			<label htmlFor={ fieldId } className="mb-2 block text-sm font-medium text-gray-900">
-				{ label }
+			<label htmlFor={fieldId} className={`mb-2 block text-sm font-medium ${disabled ? 'text-gray-400' : 'text-gray-900'}`}>
+				{label}
 			</label>
-			{ description && (
-				<p className="mb-2 text-sm text-gray-500">{ description }</p>
-			) }
+			{description && (
+				<p className={`mb-2 text-sm ${disabled ? 'text-gray-400' : 'text-gray-500'}`}>{description}</p>
+			)}
 			<select
-				id={ fieldId }
-				value={ value }
-				onChange={ ( event ) => onChange( event.target.value ) }
-				className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+				id={fieldId}
+				value={value}
+				disabled={disabled}
+				onChange={(event) => onChange(event.target.value)}
+				className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400 disabled:border-gray-200"
 			>
-				{ options.map( ( option ) => (
-					<option key={ option.value } value={ option.value }>
-						{ option.label }
+				{options.map((option) => (
+					<option key={option.value} value={option.value}>
+						{option.label}
 					</option>
-				) ) }
+				))}
 			</select>
 		</div>
 	);

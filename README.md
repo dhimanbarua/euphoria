@@ -87,6 +87,10 @@ npm run zip
   - Merge tag resolution via centralized `parseTemplate()` utility
   - `MergeTagsPanel` component with click-to-copy merge tag support
   - Supported merge tags: `{customer_name}`, `{product_name}`, `{store_name}`, `{order_id}`, `{review_url}`
+- **Feature: Conditional Settings (Phase 3 / TASK-03)**
+  - Master "Enable Email Reminder" toggle that conditionally controls General, Timing, and Delivery settings
+  - Interactive read-only states for disabled sections with clear user warning notices
+  - Context-driven state management (`SettingsContext`) to avoid prop-drilling
 - REST API settings persistence at `/wp-json/euphoria/v1/settings`
 
 ## REST API
@@ -120,10 +124,11 @@ euphoria/
 │
 ├── src/                      # React source (compiled to assets/build/)
 │   ├── index.js              # Admin app entry point
-│   ├── App.jsx               # Root component
+│   ├── App.jsx               # Root component (wrapped with SettingsProvider)
 │   ├── api/settings.js       # REST API client
 │   ├── components/           # Reusable UI (Sidebar, Tabs, Toggle, MergeTagsPanel, etc.)
 │   ├── pages/EmailReminder.jsx  # Main settings screen
+│   ├── store/SettingsContext.jsx # Global settings state provider
 │   └── utils/parseTemplate.js  # Merge tag parser + MERGE_TAGS mock data
 │
 ├── assets/build/             # Compiled admin.js, admin.css (generated)

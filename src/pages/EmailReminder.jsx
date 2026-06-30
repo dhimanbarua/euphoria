@@ -1,7 +1,6 @@
-import { useEffect, useState } from '@wordpress/element';
-import { getSettings, saveSettings } from '../api/settings';
+import { useState } from '@wordpress/element';
+import { useSettings } from '../store/SettingsContext';
 import {
-	defaultSettings,
 	deliveryOptions,
 	highRatingOptions,
 	highRedirectOptions,
@@ -25,82 +24,19 @@ const tabs = [
 ];
 
 const EmailReminder = () => {
-	const [ settings, setSettings ] = useState( defaultSettings );
+	const {
+		settings,
+		isLoading,
+		isSaving,
+		notice,
+		updateSetting,
+		updateTemplateSetting,
+		setEnabled,
+		handleSave,
+	} = useSettings();
+
 	const [ activeTab, setActiveTab ] = useState( 'settings' );
 	const [ previewMode, setPreviewMode ] = useState( 'desktop' );
-	const [ isLoading, setIsLoading ] = useState( true );
-	const [ isSaving, setIsSaving ] = useState( false );
-	const [ notice, setNotice ] = useState( '' );
-
-	useEffect( () => {
-		getSettings()
-			.then( ( data ) => {
-				setSettings( {
-					...defaultSettings,
-					...data,
-					general: { ...defaultSettings.general, ...data.general },
-					timing: { ...defaultSettings.timing, ...data.timing },
-					delivery: { ...defaultSettings.delivery, ...data.delivery },
-					ratings_scale: {
-						...defaultSettings.ratings_scale,
-						...data.ratings_scale,
-					},
-					redirection: {
-						...defaultSettings.redirection,
-						...data.redirection,
-					},
-					templates: {
-						first_email: {
-							...defaultSettings.templates.first_email,
-							...( data.templates?.first_email || {} ),
-						},
-					},
-				} );
-			} )
-			.catch( () => {
-				setNotice( 'Unable to load settings.' );
-			} )
-			.finally( () => {
-				setIsLoading( false );
-			} );
-	}, [] );
-
-	const updateSetting = ( section, key, value ) => {
-		setSettings( ( current ) => ( {
-			...current,
-			[ section ]: {
-				...current[ section ],
-				[ key ]: value,
-			},
-		} ) );
-	};
-
-	const updateTemplateSetting = ( key, value ) => {
-		setSettings( ( current ) => ( {
-			...current,
-			templates: {
-				...current.templates,
-				first_email: {
-					...current.templates.first_email,
-					[ key ]: value,
-				},
-			},
-		} ) );
-	};
-
-	const handleSave = async () => {
-		setIsSaving( true );
-		setNotice( '' );
-
-		try {
-			await saveSettings( settings );
-			setNotice( 'Settings saved successfully.' );
-		} catch ( error ) {
-			setNotice( error?.message || 'Unable to save settings.' );
-		} finally {
-			setIsSaving( false );
-		}
-	};
 
 	const renderStaticTab = ( title, description ) => (
 		<div className="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-10 text-center">
@@ -109,127 +45,137 @@ const EmailReminder = () => {
 		</div>
 	);
 
-	const renderSettingsTab = () => (
-		<div className="space-y-4">
-			<div className="rounded-xl border border-gray-200 bg-white px-5 py-4">
-				<Toggle
-					id="email-reminder-enabled"
-					checked={ settings.enabled }
-					onChange={ ( value ) =>
-						setSettings( ( current ) => ( { ...current, enabled: value } ) )
-					}
-					label="Email Reminder"
-					description="Enable automated review request emails and follow-ups for WooCommerce orders."
-				/>
-			</div>
+	const renderSettingsTab = () => {
+		const isDisabled = ! settings.enabled;
 
-			<SectionCard title="General">
-				<FormField
-					label="Trigger review emails when order is"
-					value={ settings.general.trigger_when }
-					onChange={ ( value ) => updateSetting( 'general', 'trigger_when', value ) }
-					options={ triggerOptions }
-				/>
-				<FormField
-					type="checkbox"
-					label="Exclude refunded orders"
-					value={ settings.general.exclude_refunded }
-					onChange={ ( value ) => updateSetting( 'general', 'exclude_refunded', value ) }
-				/>
-				<FormField
-					type="checkbox"
-					label="Exclude cancelled orders"
-					value={ settings.general.exclude_cancelled }
-					onChange={ ( value ) => updateSetting( 'general', 'exclude_cancelled', value ) }
-				/>
-				<FormField
-					type="checkbox"
-					label="Enable in-email rating"
-					value={ settings.general.enable_in_email_rating }
-					onChange={ ( value ) =>
-						updateSetting( 'general', 'enable_in_email_rating', value )
-					}
-				/>
-				<FormField
-					type="checkbox"
-					label="Add an unsubscribe link in email"
-					value={ settings.general.add_unsubscribe_link }
-					onChange={ ( value ) =>
-						updateSetting( 'general', 'add_unsubscribe_link', value )
-					}
-				/>
-			</SectionCard>
-
-			<SectionCard title="Timing">
-				<div className="grid gap-4 md:grid-cols-2">
-					<FormField
-						label="Send between (Store time)"
-						value={ settings.timing.send_from }
-						onChange={ ( value ) => updateSetting( 'timing', 'send_from', value ) }
-						options={ timeOptions() }
-					/>
-					<FormField
-						label="To"
-						value={ settings.timing.send_to }
-						onChange={ ( value ) => updateSetting( 'timing', 'send_to', value ) }
-						options={ timeOptions() }
+		return (
+			<div className="space-y-4">
+				<div className="rounded-xl border border-gray-200 bg-white px-5 py-4">
+					<Toggle
+						id="email-reminder-enabled"
+						checked={ settings.enabled }
+						onChange={ setEnabled }
+						label="Email Reminder"
+						description="Enable automated review request emails and follow-ups for WooCommerce orders."
 					/>
 				</div>
-			</SectionCard>
 
-			<SectionCard title="Delivery">
-				<FormField
-					label="Email sending method"
-					description="Connect an SMTP plugin to ensure review reminders are delivered reliably."
-					value={ settings.delivery.method }
-					onChange={ ( value ) => updateSetting( 'delivery', 'method', value ) }
-					options={ deliveryOptions }
-				/>
-			</SectionCard>
+				<SectionCard title="General" disabled={ isDisabled }>
+					<FormField
+						label="Trigger review emails when order is"
+						value={ settings.general.trigger_when }
+						onChange={ ( value ) => updateSetting( 'general', 'trigger_when', value ) }
+						options={ triggerOptions }
+						disabled={ isDisabled }
+					/>
+					<FormField
+						type="checkbox"
+						label="Exclude refunded orders"
+						value={ settings.general.exclude_refunded }
+						onChange={ ( value ) => updateSetting( 'general', 'exclude_refunded', value ) }
+						disabled={ isDisabled }
+					/>
+					<FormField
+						type="checkbox"
+						label="Exclude cancelled orders"
+						value={ settings.general.exclude_cancelled }
+						onChange={ ( value ) => updateSetting( 'general', 'exclude_cancelled', value ) }
+						disabled={ isDisabled }
+					/>
+					<FormField
+						type="checkbox"
+						label="Enable in-email rating"
+						value={ settings.general.enable_in_email_rating }
+						onChange={ ( value ) =>
+							updateSetting( 'general', 'enable_in_email_rating', value )
+						}
+						disabled={ isDisabled }
+					/>
+					<FormField
+						type="checkbox"
+						label="Add an unsubscribe link in email"
+						value={ settings.general.add_unsubscribe_link }
+						onChange={ ( value ) =>
+							updateSetting( 'general', 'add_unsubscribe_link', value )
+						}
+						disabled={ isDisabled }
+					/>
+				</SectionCard>
 
-			<SectionCard title="Ratings scale">
-				<FormField
-					label="Calculate low ratings"
-					value={ settings.ratings_scale.low_ratings }
-					onChange={ ( value ) => updateSetting( 'ratings_scale', 'low_ratings', value ) }
-					options={ lowRatingOptions }
-				/>
-				<FormField
-					label="Calculate high ratings"
-					value={ settings.ratings_scale.high_ratings }
-					onChange={ ( value ) => updateSetting( 'ratings_scale', 'high_ratings', value ) }
-					options={ highRatingOptions }
-				/>
-			</SectionCard>
+				<SectionCard title="Timing" disabled={ isDisabled }>
+					<div className="grid gap-4 md:grid-cols-2">
+						<FormField
+							label="Send between (Store time)"
+							value={ settings.timing.send_from }
+							onChange={ ( value ) => updateSetting( 'timing', 'send_from', value ) }
+							options={ timeOptions() }
+							disabled={ isDisabled }
+						/>
+						<FormField
+							label="To"
+							value={ settings.timing.send_to }
+							onChange={ ( value ) => updateSetting( 'timing', 'send_to', value ) }
+							options={ timeOptions() }
+							disabled={ isDisabled }
+						/>
+					</div>
+				</SectionCard>
 
-			<SectionCard title="Redirection">
-				<FormField
-					label="Redirect low ratings to"
-					value={ settings.redirection.low_ratings_to }
-					onChange={ ( value ) => updateSetting( 'redirection', 'low_ratings_to', value ) }
-					options={ lowRedirectOptions }
-				/>
-				<FormField
-					label="Redirect high ratings to"
-					value={ settings.redirection.high_ratings_to }
-					onChange={ ( value ) => updateSetting( 'redirection', 'high_ratings_to', value ) }
-					options={ highRedirectOptions }
-				/>
-			</SectionCard>
+				<SectionCard title="Delivery" disabled={ isDisabled }>
+					<FormField
+						label="Email sending method"
+						description="Connect an SMTP plugin to ensure review reminders are delivered reliably."
+						value={ settings.delivery.method }
+						onChange={ ( value ) => updateSetting( 'delivery', 'method', value ) }
+						options={ deliveryOptions }
+						disabled={ isDisabled }
+					/>
+				</SectionCard>
 
-			<div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-5 py-4">
-				{ notice && <p className="text-sm text-gray-600">{ notice }</p> }
-				<button
-					type="button"
-					onClick={ handleSave }
-					disabled={ isSaving }
-					className="ml-auto rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
-				>
-					{ isSaving ? 'Saving…' : 'Save Settings' }
-				</button>
+				<SectionCard title="Ratings scale">
+					<FormField
+						label="Calculate low ratings"
+						value={ settings.ratings_scale.low_ratings }
+						onChange={ ( value ) => updateSetting( 'ratings_scale', 'low_ratings', value ) }
+						options={ lowRatingOptions }
+					/>
+					<FormField
+						label="Calculate high ratings"
+						value={ settings.ratings_scale.high_ratings }
+						onChange={ ( value ) => updateSetting( 'ratings_scale', 'high_ratings', value ) }
+						options={ highRatingOptions }
+					/>
+				</SectionCard>
+
+				<SectionCard title="Redirection">
+					<FormField
+						label="Redirect low ratings to"
+						value={ settings.redirection.low_ratings_to }
+						onChange={ ( value ) => updateSetting( 'redirection', 'low_ratings_to', value ) }
+						options={ lowRedirectOptions }
+					/>
+					<FormField
+						label="Redirect high ratings to"
+						value={ settings.redirection.high_ratings_to }
+						onChange={ ( value ) => updateSetting( 'redirection', 'high_ratings_to', value ) }
+						options={ highRedirectOptions }
+					/>
+				</SectionCard>
+
+				<div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-5 py-4">
+					{ notice && <p className="text-sm text-gray-600">{ notice }</p> }
+					<button
+						type="button"
+						onClick={ handleSave }
+						disabled={ isSaving }
+						className="ml-auto rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+					>
+						{ isSaving ? 'Saving…' : 'Save Settings' }
+					</button>
+				</div>
 			</div>
-		</div>
-	);
+		);
+	};
 
 	const renderFirstEmailTab = () => {
 		const firstEmail = settings.templates.first_email;
