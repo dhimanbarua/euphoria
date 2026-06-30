@@ -82,7 +82,11 @@ npm run zip
 - Static sidebar navigation matching the design
 - Settings, First Email, and Follow-ups tabs
 - Email Reminder toggle and settings sections
-- Desktop / Mobile email preview panel
+- **Phase 1 – Dynamic Email Preview System**
+  - Live Desktop / Mobile email preview panel that re-renders on every keystroke
+  - Merge tag resolution via centralized `parseTemplate()` utility
+  - `MergeTagsPanel` component with click-to-copy merge tag support
+  - Supported merge tags: `{customer_name}`, `{product_name}`, `{store_name}`, `{order_id}`, `{review_url}`
 - REST API settings persistence at `/wp-json/euphoria/v1/settings`
 
 ## REST API
@@ -118,8 +122,9 @@ euphoria/
 │   ├── index.js              # Admin app entry point
 │   ├── App.jsx               # Root component
 │   ├── api/settings.js       # REST API client
-│   ├── components/           # Reusable UI (Sidebar, Tabs, Toggle, etc.)
-│   └── pages/EmailReminder.jsx  # Main settings screen
+│   ├── components/           # Reusable UI (Sidebar, Tabs, Toggle, MergeTagsPanel, etc.)
+│   ├── pages/EmailReminder.jsx  # Main settings screen
+│   └── utils/parseTemplate.js  # Merge tag parser + MERGE_TAGS mock data
 │
 ├── assets/build/             # Compiled admin.js, admin.css (generated)
 ├── build/                    # Distribution output from `npm run buildfolder`

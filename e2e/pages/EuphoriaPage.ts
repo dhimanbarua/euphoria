@@ -19,7 +19,7 @@ export class EuphoriaPage{
 
     async toggleReminder(){
 
-        await this.page.getByRole('switch').click();
+        await this.page.getByRole('checkbox').click();
 
     }
 

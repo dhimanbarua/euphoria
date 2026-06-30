@@ -1,23 +1,13 @@
-# Phase 2 - Email Template Editor
+Phase 1 Dynamic Email Preview System
 
-## Goal
-Create a dynamic email template editor with live preview.
+Features:
+Live preview
+Merge tags
+Real-time updates
 
-## Features
-- EmailEditor
-- EmailPreview
-- MergeTagsPanel
-- parseTemplate()
-- Save/Load via REST API
-
-## Merge Tags
-- {customer_name}
-- {product_name}
-- {store_name}
-- {order_id}
-- {review_url}
-
-## Constraints
-- Follow AGENT.md
-- Reuse existing architecture
-- No breaking changes
+Supported merge tags:
+{customer_name}
+{product_name}
+{store_name}
+{order_id}
+{review_url}

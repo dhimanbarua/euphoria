@@ -11,6 +11,7 @@ import {
 	triggerOptions,
 } from '../constants';
 import FormField from '../components/FormField';
+import MergeTagsPanel from '../components/MergeTagsPanel';
 import PreviewPanel from '../components/PreviewPanel';
 import SectionCard from '../components/SectionCard';
 import Sidebar from '../components/Sidebar';
@@ -235,35 +236,8 @@ const EmailReminder = () => {
 
 		return (
 			<div className="space-y-4">
-				{ /* Merge Tag Info Box */ }
-				<div className="rounded-xl border border-sky-100 bg-sky-50/50 p-5">
-					<h3 className="text-sm font-semibold text-sky-950">Supported Merge Tags</h3>
-					<p className="mt-1 text-sm text-sky-800">
-						Use these tags in your email fields to dynamically pull customer and order information:
-					</p>
-					<div className="mt-3 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-						<div className="rounded-lg border border-sky-100/80 bg-white p-3 shadow-sm">
-							<code className="text-xs font-semibold text-emerald-700 font-mono">{'{customer_name}'}</code>
-							<p className="mt-1 text-xs text-gray-500">Customer's full name</p>
-						</div>
-						<div className="rounded-lg border border-sky-100/80 bg-white p-3 shadow-sm">
-							<code className="text-xs font-semibold text-emerald-700 font-mono">{'{product_name}'}</code>
-							<p className="mt-1 text-xs text-gray-500">Name of the purchased product</p>
-						</div>
-						<div className="rounded-lg border border-sky-100/80 bg-white p-3 shadow-sm">
-							<code className="text-xs font-semibold text-emerald-700 font-mono">{'{store_name}'}</code>
-							<p className="mt-1 text-xs text-gray-500">Your WooCommerce store name</p>
-						</div>
-						<div className="rounded-lg border border-sky-100/80 bg-white p-3 shadow-sm">
-							<code className="text-xs font-semibold text-emerald-700 font-mono">{'{order_id}'}</code>
-							<p className="mt-1 text-xs text-gray-500">The WooCommerce order number</p>
-						</div>
-						<div className="rounded-lg border border-sky-100/80 bg-white p-3 shadow-sm">
-							<code className="text-xs font-semibold text-emerald-700 font-mono">{'{review_url}'}</code>
-							<p className="mt-1 text-xs text-gray-500">Link to the product review form</p>
-						</div>
-					</div>
-				</div>
+				{ /* Merge Tags – reusable component with copy-to-clipboard */ }
+				<MergeTagsPanel />
 
 				{ /* Form Card */ }
 				<SectionCard title="First Email Template">

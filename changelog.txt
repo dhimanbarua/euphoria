@@ -1,6 +1,11 @@
 = 1.0.0 =
-* Implement Phase 1: Dynamic Email Preview System with live desktop/mobile preview and merge tag interpolation.
-* Implement Phase 2: Email Template Editor with subject line, banner, heading, body, button, and footer customizability, real-time preview updates, and database option persistence.
+* Phase 1 – Dynamic Email Preview System:
+  * Extracted `parseTemplate()` into `src/utils/parseTemplate.js` as a standalone, documented utility.
+  * Added `MERGE_TAGS` (mock preview data) and `MERGE_TAG_META` (UI display metadata) exports.
+  * Created reusable `MergeTagsPanel` React component with click-to-copy clipboard support.
+  * Refactored `PreviewPanel` to consume `parseTemplate()` from the shared utility.
+  * Removed duplicated inline merge-tag markup from `EmailReminder` page.
+* Phase 2 – Email Template Editor with subject line, banner, heading, body, button, and footer customisability, real-time preview updates, and database option persistence.
 
 = 0.0.1 =
 * Initial release

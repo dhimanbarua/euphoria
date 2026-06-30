@@ -8,7 +8,12 @@
     "zip": "npx gulp zip",
     "buildfolder": "npx gulp build-folder",
     "lint:js": "wp-scripts lint-js",
-    "format": "wp-scripts format"
+    "format": "wp-scripts format",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@wordpress/api-fetch": "^7.0.0",
@@ -16,6 +21,7 @@
     "@wordpress/element": "^6.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@wordpress/scripts": "^30.0.0",
     "autoprefixer": "^10.4.20",
     "del": "^8.0.1",
